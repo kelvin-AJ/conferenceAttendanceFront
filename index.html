@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stake Conference Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles & Font */
+        html {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+        body {
+            margin: 0;
+            padding: 32px 16px; /* py-8 px-4 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #F9FAFB, #EBF8FF); /* from-background-light to-blue-50 */
+            color: #1F2937; /* text-text-dark */
+            animation: fadeIn 0.8s ease-out forwards;
+            position: relative; /* For the background gradient div */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        /* Color Variables */
+        :root {
+            --color-primary-blue: #1A4D8C; /* Deeper blue, reverent */
+            --color-light-blue: #3E82F7;  /* Brighter blue, inviting */
+            --color-accent-gold: #F7B32B; /* Vibrant gold, uplifting */
+            --color-background-light: #F9FAFB; /* Off-white, clean */
+            --color-text-dark: #1F2937; /* Dark gray for readability */
+            --color-gray-300: #D1D5DB; /* light gray for borders */
+            --color-gray-400: #9CA3AF; /* for disabled buttons */
+            --color-gray-500: #6B7280; /* for placeholder text */
+            --color-gray-100: #F3F4F6; /* for light borders/backgrounds */
+            --color-blue-100: #DBEAFE; /* for background gradient */
+            --color-blue-50: #EFF6FF; /* for background gradient */
+        }
+
+        /* Background Gradient Animation */
+        .background-animated {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            background: linear-gradient(270deg, var(--color-blue-100), var(--color-blue-50), var(--color-background-light));
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+            opacity: 0.75;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            max-width: 800px; /* max-w-2xl */
+            text-align: center;
+            margin-bottom: 40px; /* mb-10 */
+            padding: 24px; /* p-6 */
+            background-color: var(--color-primary-blue);
+            color: white;
+            border-radius: 12px; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* transition-all duration-300 */
+        }
+        header:hover {
+            transform: scale(1.01); /* hover:scale-[1.01] */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* hover:shadow-2xl */
+        }
+        header h1 {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            letter-spacing: -0.025em; /* tracking-tight */
+            line-height: 1.25; /* leading-tight */
+            margin: 0;
+        }
+        header p {
+            margin-top: 8px; /* mt-2 */
+            font-size: 1.125rem; /* text-lg */
+            opacity: 0.9;
+        }
+
+        /* Main Content Area */
+        main {
+            width: 100%;
+            max-width: 480px; /* max-w-md */
+            background-color: white;
+            padding: 32px; /* p-8 */
+            border-radius: 16px; /* rounded-2xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            border: 1px solid var(--color-gray-100);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px; /* space-y-6 */
+        }
+
+        /* Input Field */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px; /* px-5 py-3 */
+            border: 1px solid var(--color-gray-300);
+            border-radius: 8px; /* rounded-lg */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            font-size: 1.125rem; /* text-lg */
+            color: var(--color-text-dark);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease; /* transition-all duration-200 */
+            outline: none; /* Remove default focus outline */
+        }
+        input[type="text"]::placeholder {
+            color: var(--color-gray-500); /* placeholder-gray-400 */
+        }
+        input[type="text"]:hover {
+            border-color: var(--color-gray-400); /* hover:border-gray-400 */
+        }
+        input[type="text"]:focus {
+            border-color: var(--color-light-blue);
+            box-shadow: 0 0 0 3px rgba(62, 130, 247, 0.5); /* focus:ring-2 focus:ring-light-blue */
+        }
+
+        /* QR Reader Area */
+        #reader {
+            width: 100%;
+            height: 320px; /* h-80 */
+            background-color: var(--color-gray-100);
+            border: 2px dashed var(--color-light-blue);
+            border-radius: 12px; /* rounded-xl */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Ensure QR code video stays within bounds */
+        }
+        #reader p {
+            color: var(--color-gray-500);
+            font-size: 1.125rem; /* text-lg */
+        }
+        /* Style for the video element inside #reader, if it exists */
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover; /* Cover the area without distortion */
+            border-radius: 10px; /* Match parent border-radius */
+        }
+
+        /* Buttons Container */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: center;
+            gap: 16px; /* space-y-4 */
+            margin-top: 24px; /* mt-6 */
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+            .button-group {
+                flex-direction: row;
+                gap: 16px; /* sm:space-x-4 */
+                margin-top: 24px; /* sm:space-y-0 */
+            }
+        }
+
+        /* Buttons */
+        .button {
+            flex: 1; /* flex-1 */
+            padding: 16px 32px; /* px-8 py-4 */
+            font-weight: 700; /* font-bold */
+            font-size: 1.25rem; /* text-xl */
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* transition-all duration-300 */
+            border: none;
+            cursor: pointer;
+            outline: none; /* Remove default focus outline */
+        }
+        .button:hover {
+            transform: scale(1.05); /* hover:scale-105 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-lg */
+        }
+        .button:active {
+            transform: scale(0.95); /* active:scale-95 */
+        }
+        .button:focus-visible { /* Use focus-visible for accessibility */
+            box-shadow: 0 0 0 4px rgba(62, 130, 247, 0.5); /* focus:ring-4 focus:ring-light-blue */
+        }
+
+        #start-btn {
+            background-color: var(--color-light-blue);
+            color: white;
+        }
+        #start-btn:focus-visible {
+            box-shadow: 0 0 0 4px rgba(62, 130, 247, 0.5);
+        }
+
+        #end-btn {
+            background-color: var(--color-accent-gold);
+            color: white;
+        }
+        #end-btn:focus-visible {
+            box-shadow: 0 0 0 4px rgba(247, 179, 43, 0.5);
+        }
+        #end-btn:disabled {
+            background-color: var(--color-gray-400);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.6; /* disabled:opacity-60 */
+        }
+
+        /* Keyframe Animations */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background gradient with animation -->
+    <div class="background-animated"></div>
+
+    <header>
+        <h1>Stake Conference Attendance</h1>
+        <p class="info">Welcome, Saints! Please scan your QR code.</p>
+    </header>
+
+    <main>
+        <input type="text" placeholder="Full Name Here" id="fullName">
+
+        <div id="reader">
+            <p>QR Code Scanner Area</p>
+        </div>
+
+        <div class="button-group">
+            <button id="start-btn" class="button">
+                Start Scanning
+            </button>
+            <button id="end-btn" class="button" disabled>
+                End Session
+            </button>
+        </div>
+    </main>
+
+    <!-- Script tags for QR code reader and your custom script -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
