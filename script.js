@@ -33,7 +33,7 @@ const beginApp = async function(scanHandler, qrCode) {
   try{
     const cameras = await Html5Qrcode.getCameras();
 
-    const cameraId = cameras[0].id;
+    const cameraId = cameras[1].id;
     const options = {
       fps: 5,
       qrbox: {width:250, height: 250}
