@@ -2,7 +2,8 @@
 const fullNameInput = document.querySelector("#fullName");
 const startBtn = document.querySelector("#start-btn");
 const endBtn = document.querySelector("#end-btn");
-const infoArea = document.querySelector(".info")
+const infoArea = document.querySelector(".info");
+const input = document.querySelector("#test")
 
 
 const html5QrCode = new Html5Qrcode("reader");
@@ -31,10 +32,10 @@ const scanHandler = async (decodedText, decodedResult) => {
 const beginApp = async function(scanHandler, qrCode) {
 
   try{
-    const cameras = await Html5Qrcode.getCameras();
-    setMessage(JSON.stringify(cameras))
 
-    const cameraId = cameras[1].id;
+    // setMessage(JSON.stringify(cameras))
+
+    const cameraId = input.value;
     const options = {
       fps: 5,
       qrbox: {width:250, height: 250}
@@ -87,7 +88,10 @@ const submitAttendance = async function (attendeeId, fullName=`Person-${Date.now
 }
 
 
-
+const begin = async function() {const cameras = await Html5Qrcode.getCameras();
+cameras.forEach(camera => {
+      input.insertAdjacentHTML("beforeend", `<option value="${camera.id}">${camera.label}</option>`)
+})}
 
 
 startBtn.addEventListener("click", () => {
@@ -96,3 +100,5 @@ startBtn.addEventListener("click", () => {
 endBtn.addEventListener("click", () => {
   closeApp(html5QrCode)
 })
+
+begin();
