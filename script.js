@@ -32,6 +32,7 @@ const beginApp = async function(scanHandler, qrCode) {
 
   try{
     const cameras = await Html5Qrcode.getCameras();
+    setMessage(JSON.stringify(cameras))
 
     const cameraId = cameras[1].id;
     const options = {
