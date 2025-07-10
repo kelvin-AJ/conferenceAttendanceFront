@@ -22,6 +22,7 @@ const scanHandler = async (decodedText, decodedResult) => {
       setMessage(`${fullNameInput.value} has already been marked present`)
     }else{
       setMessage("Something went wrong")
+      throw Error("An Error Ocuured, Debeg: ", response)
     }
 
     fullNameInput.value = "";
